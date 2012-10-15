@@ -1,12 +1,13 @@
-#! /usr/bin/env python3.2
+#! /usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
 '''
-Created on 07/03/2011
+Created on 14/10/2012
 
-@author: ispmarin
+@author: Ivan Marin
+@email: ispmarin@gmail.com
 '''
-import argparse
+#import argparse
 #import shapely.geometry as shp
 import sys
 import numpy as np
@@ -30,7 +31,7 @@ class node():
 class system_def():
     """
     """
-    def __init__(self,dimx, dimy, cell_spacing, init_head):
+    def __init__(self,dimx, dimy, cell_spacing, init_head, k, porosity):
 
         self.dimx = dimx
         self.dimy = dimy
@@ -39,12 +40,19 @@ class system_def():
         self.tot_cells_y = int(round(self.dimy , self.cell_spacing) + 1) # for the boundary conditions
         self.space = np.ones((self.tot_cells_x, self.tot_cells_y)) * init_head
         self.init_head = init_head
+        self.k = k 
+        self.porosity = porosity
+        self.velx = np.zeros((self.tot_cells_x, self.tot_cells_y))
+        self.vely = np.zeros((self.tot_cells_x, self.tot_cells_y))
         print self.tot_cells_x, self.tot_cells_y
 
     def boundary_conditions(self,head_up, head_down):
         self.space[0,:] = head_up
         self.space[self.tot_cells_x-1,:] = head_down
 
+    def set_velocity(self, velx, vely):
+        self.velx = velx
+        self.vely = vely
 
 class calculations():
     """
@@ -77,24 +85,39 @@ class calculations():
                     prev_head = now_head 
 
             
+def velocity(system):
+    
+    (vely,velx) =  np.gradient(system.space)
+
+    for i in xrange(system.tot_cells_x):
+        for j in xrange(system.tot_cells_y):
+            velx[i,j] = -system.k * velx[i,j] / system.porosity
+            vely[i,j] = -system.k * vely[i,j] / system.porosity
+    
+    system.set_velocity(velx, vely)
 
 
 def main():
-    size_x = 100
-    size_y = 100
-    cell_spacing = .5 
-    initial_head = 50
-    max_iter = 44500
-    limit_conver = 1e-3
-    system = system_def(size_x, size_y, cell_spacing, initial_head)
+   
+    size_x = 50
+    size_y = 50
+    cell_spacing = .25 
+    initial_head = 40
+    hydraulic_conduct = 10
+    porosity = 0.15
+    max_iter = 5000
+    limit_conver = 1e-1
+    system = system_def(size_x, size_y, cell_spacing, initial_head, hydraulic_conduct, porosity)
     system.boundary_conditions(100,50)
+    
     calculate = calculations(max_iter, limit_conver,system)
     calculate.do_it()
     
+    velocity(system)
     
     plotter = output.plotter(system.tot_cells_x, system.tot_cells_y, 10, system.space)
     plotter.plot_head('screen')
-
+    plotter.plot_velocity(system.velx, system.vely)
 
 if __name__ == "__main__":
     sys.exit(main())

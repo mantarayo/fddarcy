@@ -3,11 +3,11 @@ Created on 16/03/2011
 
 @author: ispmarin
 '''
-import matplotlib
+#import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
-import numpy as np
-from mpl_toolkits.mplot3d import  Axes3D
+#import numpy as np
+#from mpl_toolkits.mplot3d import  Axes3D
 
 
 class plotter(object):
@@ -25,23 +25,12 @@ class plotter(object):
         self.num_isolines = num_isoline
         self.a = space
         
-    def plot_velocity(self, element_list, uniform_flow, aquifer):
+    def plot_velocity(self, velx, vely):
         
           
-        (velx,vely) =  np.gradient(self.a, self.sample_distance_x, self.sample_distance_y)
-        
         fig0 = plt.figure()
         ax = fig0.add_subplot(111)
-        
-        k_surf = np.zeros([self.len_x, self.len_y], dtype=float)
-        
-        Q = ax.quiver(self.X,self.Y, -velx, -vely )
-        
-        fig1= plt.figure(2)
-        ax2 = Axes3D(fig1)
-        surf = ax2.plot_surface(self.X,self.Y, k_surf, cmap=matplotlib.cm.jet, alpha=0.3)
-        #surf = ax2.plot_surface(self.X,self.Y,vely, cmap=matplotlib.cm.jet, alpha=0.3)
-        fig1.colorbar(surf, shrink=0.5, aspect=5)
+        ax.quiver(velx, vely)
         
         plt.show()
         
