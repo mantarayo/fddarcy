@@ -73,7 +73,8 @@ class calculations():
                for j in xrange(1,self.system.tot_cells_y - 1):
                    self.system.space[i,j] =  onespacing  * \
                    (self.system.space[i-1,j] + self.system.space[i,j-1] + self.system.space[i+1,j] + self.system.space[i,j+1] )
-           
+           self.system.space[:,0] = self.system.space[:,1]
+           self.system.space[:,self.system.tot_cells_x -1] = self.system.space[:,self.system.tot_cells_x-2] #for boundary conditions copied from inside to the bourders after the run
 
            iter_n = iter_n+1
            if iter_n % 5 == 0:
@@ -99,14 +100,14 @@ def velocity(system):
 
 def main():
    
-    size_x = 50
-    size_y = 50
+    size_x = 10
+    size_y = 10
     cell_spacing = .25 
-    initial_head = 40
+    initial_head = 1
     hydraulic_conduct = 10
     porosity = 0.15
     max_iter = 5000
-    limit_conver = 1e-1
+    limit_conver = 1e-3
     system = system_def(size_x, size_y, cell_spacing, initial_head, hydraulic_conduct, porosity)
     system.boundary_conditions(100,50)
     
