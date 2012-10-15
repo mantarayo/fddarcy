@@ -46,10 +46,14 @@ class system_def():
         self.vely = np.zeros((self.tot_cells_x, self.tot_cells_y))
         print self.tot_cells_x, self.tot_cells_y
 
-    def boundary_conditions(self,head_up, head_down):
+    def fixed_boundary_conditions(self,head_up, head_down):
         self.space[0,:] = head_up
         self.space[self.tot_cells_x-1,:] = head_down
 
+    def line_boundary_conditions(self, head_up, head_down):
+        self.space[0,:] = np.linspace(head_down,head_up,self.tot_cells_x)
+        self.space[self.tot_cells_x-1,:] = head_down
+    
     def set_velocity(self, velx, vely):
         self.velx = velx
         self.vely = vely
@@ -98,6 +102,34 @@ def velocity(system):
     system.set_velocity(velx, vely)
 
 
+def calculate_velocity(system):
+    velx = np.zeros((system.tot_cells_x, system.tot_cells_y))
+    vely = np.zeros((system.tot_cells_x, system.tot_cells_y))
+    
+    constant = system.k / system.porosity
+
+    for i in xrange(1, system.tot_cells_x -1):
+        for j in xrange(1, system.tot_cells_y - 1):
+            velx[i,j] = -constant * (system.space[i,j+1] - system.space[i,j])/system.cell_spacing
+            vely[i,j] = -constant * (system.space[i+1,j] - system.space[i,j])/system.cell_spacing
+    return velx, vely
+
+
+class particle()
+
+class random_walk():
+    """
+    """
+
+    def __init__(self,seed, deltaT, particle_num, DL, DT)
+        self.seed = seed
+        self.deltaT = deltaT
+        self.particle_num = particle_num
+        self.DL = DL
+        self.DT = DT
+    
+
+
 def main():
    
     size_x = 10
@@ -109,15 +141,19 @@ def main():
     max_iter = 5000
     limit_conver = 1e-3
     system = system_def(size_x, size_y, cell_spacing, initial_head, hydraulic_conduct, porosity)
-    system.boundary_conditions(100,50)
+    #system.fixed_boundary_conditions(100,50)
+    system.line_boundary_conditions(100,50)
     
     calculate = calculations(max_iter, limit_conver,system)
     calculate.do_it()
     
-    velocity(system)
     
     plotter = output.plotter(system.tot_cells_x, system.tot_cells_y, 10, system.space)
     plotter.plot_head('screen')
+    
+    velx, vely = calculate_velocity(system)
+    plotter.plot_velocity(velx,vely)
+    velocity(system)
     plotter.plot_velocity(system.velx, system.vely)
 
 if __name__ == "__main__":
