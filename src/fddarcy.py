@@ -11,7 +11,7 @@ Created on 14/10/2012
 # import shapely.geometry as shp
 import sys
 import numpy as np
-
+import matplotlib.pyplot as plt
 import output
 
 
@@ -71,7 +71,7 @@ class calculations():
         iter_n = 0
         prev_head = (self.system.init_head + 1) * 1000
         onespacing = 1.0 / 4.0
-        print onespacing 
+
         while (iter_n < self.max_iter):
             for i in xrange(1, self.system.tot_cells_x - 1):
                 for j in xrange(1, self.system.tot_cells_y - 1):
@@ -130,16 +130,16 @@ class random_walk():
         self.DT = DT
         self.cell_spacing = system.cell_spacing
         self.velx, self.vely = calculate_velocity(system)
-        plotter = output.plotter(system.tot_cells_x, system.tot_cells_y, 10, system.space)
-        plotter.plot_velocity(self.velx, self.vely)
+        
         self.particle_list = []
         self.system = system
-        
+        self.particle_time_step = []
         for i in xrange(self.particle_num):
             self.particle_list.append(init_position)
     
     def do_the_walk(self):
         time = 0
+        print "doing the random walk"
         while time <= self.total_time:
             for i in xrange(self.particle_num):
                 XL = np.random.random()
@@ -160,12 +160,13 @@ class random_walk():
                 x = self.particle_list[i][0] + vx * self.deltaT + np.sqrt(2.0 * self.DL * self.deltaT)* XL * (vx/modv) - np.sqrt(2.0 * self.DT * self.deltaT) * XT * (vy/modv)
                 y = self.particle_list[i][1] + vy * self.deltaT + np.sqrt(2.0 * self.DL * self.deltaT)* XL * (vy/modv) - np.sqrt(2.0 * self.DT * self.deltaT) * XT * (vx/modv)
                 
-#                print vx, self.particle_list[i][0], vx * self.deltaT,  np.sqrt(2.0 * self.DL * self.deltaT)* XL * (vx/modv), np.sqrt(2.0 * self.DT * self.deltaT) * XT * (vy/modv)
+                #print vx, self.particle_list[i][0], vx * self.deltaT,  np.sqrt(2.0 * self.DL * self.deltaT)* XL * (vx/modv), np.sqrt(2.0 * self.DT * self.deltaT) * XT * (vy/modv)
+                print self.particle_list[i][0], self.particle_list[i][1]
                 self.particle_list[i] = (abs(x),abs(y))
-                
+ 
+            self.particle_time_step.append(self.particle_list)
             time = time + self.deltaT
-            
-
+        print "finished the random walk"
 
 def main():
    
@@ -176,21 +177,22 @@ def main():
     hydraulic_conduct = 10
     porosity = 0.15
     max_iter = 5000
-    limit_conver = 1e-2
+    limit_conver = 1e-3
     system = system_def(size_x, size_y, cell_spacing, initial_head, hydraulic_conduct, porosity)
-    #system.fixed_boundary_conditions(100,90)
-    system.line_boundary_conditions(100, 50)
+    system.fixed_boundary_conditions(100,50)
+    #system.line_boundary_conditions(100, 50)
     
     calculate = calculations(max_iter, limit_conver, system)
     calculate.do_it()
     
     
     plotter = output.plotter(system.tot_cells_x, system.tot_cells_y, 10, system.space)
-    plotter.plot_head('screen')
+    #plotter.plot_head('screen')
     
-    randomguy = random_walk(1, 0.5, 100, 100 ,0.01, 0.001, (10,10), system)
+
+    randomguy = random_walk(1, 0.25, 2000, 100 ,0.10, 0.010, (20,20), system)
     randomguy.do_the_walk()
-    
+    plotter.plot_head_random(randomguy)
     #velx, vely = calculate_velocity(system)
     #plotter.plot_velocity(velx, vely)
     #velocity(system)
