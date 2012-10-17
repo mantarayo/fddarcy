@@ -15,7 +15,7 @@ import numpy as np
 import output
 import aux_func
 import random_walk
-import solvers
+import flow
 import advection
 
 
@@ -54,31 +54,37 @@ class system_def():
 
 def main():
    
-    size_x = 50
-    size_y = 50
-    cell_spacing = .5 
-    initial_head = 95
+    size_x = 10
+    size_y = 10
+    cell_spacing = .25
+    initial_head = 90
     hydraulic_conduct = 10
     porosity = 0.15
     max_iter = 5000
     limit_conver = 1e-3
-    w = 0.6
+    w = 0.5
     system = system_def(size_x, size_y, cell_spacing, initial_head, hydraulic_conduct, porosity, w)
-    system.fixed_boundary_conditions(100,50)
+    system.fixed_boundary_conditions(100,90)
     #system.line_boundary_conditions(100, 50)
     
-    calculate = solvers.calculations(max_iter, limit_conver, system)
-    calculate.do_it_SOR(w)
+    calculate = flow.calculations(max_iter, limit_conver, system)
+    #calculate.do_it_SOR(w)
+    calculate.do_it_gauss_seidel()
     aux_func.calculate_velocity(system)
     
     plotter = output.plotter(system.tot_cells_x, system.tot_cells_y, 10, system.space)
     plotter.plot_head('screen')
     
-    adv = advection.advection(0.5, system.velx, system.vely, 0.0, 100, system)
-    
+    velx, vely = aux_func.calculate_velocity(system)
+
+    deltaT = system.cell_spacing / (np.sqrt(2.0 * (np.max(velx)**2 + np.max(vely)**2)))
+    print deltaT
+    adv = advection.advection(deltaT, velx, vely, 0.0, 1000, system)
+    adv.fixed_boundary_conditions(1, 0)
     adv.do_it_conc()
 
-    plotter = output.plotter(system.tot_cells_x, system.tot_cells_y, 10, adv.concentration)
+
+    plotter = output.plotter(system.tot_cells_x, system.tot_cells_y, 10, adv.c1)
     plotter.plot_head('screen')
 
 #    randomguy = random_walk.random_walk(1, 0.25, 2000, 100 ,0.10, 0.010, (20,20), system)

@@ -43,7 +43,7 @@ class calculations():
         while (iter_n < self.max_iter):
             for i in xrange(1, self.system.tot_cells_x - 1):
                 for j in xrange(1, self.system.tot_cells_y - 1):
-                    self.system.space[i, j] = self.system.space[i,j] + w * (onespacing * \
+                    self.system.space[i, j] =  self.system.space[i,j] + w * (onespacing * \
                     (self.system.space[i - 1, j] + self.system.space[i, j - 1] + self.system.space[i + 1, j] + self.system.space[i, j + 1]) - self.system.space[i,j])
                     
             self.system.space[:, 0] = self.system.space[:, 1]

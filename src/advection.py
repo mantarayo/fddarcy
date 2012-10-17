@@ -20,28 +20,36 @@ class advection(object):
         self.velx = velx
         self.vely = vely
         self.max_iter = max_iter
-        self.concentration = np.ones((system.tot_cells_x, system.tot_cells_y)) * background_c
+        self.c1 = np.ones((system.tot_cells_x, system.tot_cells_y)) * background_c
+        self.c2 = np.ones((system.tot_cells_x, system.tot_cells_y)) * background_c
         self.tot_cells_x = system.tot_cells_x
         self.tot_cells_y = system.tot_cells_y
         self.cell_spacing = system.cell_spacing
     
     def line_boundary_conditions(self, conc_up, conc_down):
-        self.space[0, :] = np.linspace(conc_down, conc_up, self.tot_cells_x)
-        self.space[self.tot_cells_x - 1, :] = conc_down
+        self.c1[0, :] = np.linspace(conc_down, conc_up, self.tot_cells_x)
+        self.c1[self.tot_cells_x - 1, :] = conc_down
+    def fixed_boundary_conditions(self, head_up, head_down):
+        self.c1[0, :] = head_up
+        self.c1[self.tot_cells_x - 1, :] = head_down
         
         
     def do_it_conc(self):
         iter_n = 0
-
+        onespacing = 1.0/4.0
         print "advecting..."
         while (iter_n < self.max_iter):
             for i in xrange(1, self.tot_cells_x - 1):
                 for j in xrange(1, self.tot_cells_y - 1):
-                    self.concentration[i,j] = self.concentration[i,j] - self.deltaT * ( self.velx[i,j]*(self.concentration[i,j]/self.cell_spacing) + 
-                                                                                      self.vely[i,j]*(self.concentration[i,j]/self.cell_spacing)  )
-            self.concentration[:, 0] = self.concentration[:, 1]
-            self.concentration[:, self.tot_cells_x - 1] = self.concentration[:, self.tot_cells_x - 2]  # for boundary conditions copied from inside to the bourders after the run
-
+                    
+                    self.c2[i,j] = onespacing * (self.c1[i+1,j] + self.c1[i-1,j] + self.c1[i,j+1] + self.c1[i,j-1]) - \
+                    (self.deltaT/(2*self.cell_spacing))*(self.velx[i,j]*(self.c1[i+1,j] - self.c1[i-1,j]) + self.vely[i,j]*(self.c1[i,j+1] - self.c1[i,j-1]))
+                    
+            self.c2[:, 0] = self.c2[:, 1]
+            self.c2[:, self.tot_cells_x - 1] = self.c2[:, self.tot_cells_x - 2]  # for boundary conditions copied from inside to the bourders after the run
+            
+            self.c1 = self.c2
+            
             iter_n = iter_n + 1
-        print self.concentration
+        #print self.c1
         print "advected"
