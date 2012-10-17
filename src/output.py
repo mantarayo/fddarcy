@@ -1,13 +1,12 @@
 '''
-Created on 16/03/2011
+Created on 15/10/2012
 
-@author: ispmarin
+@author: Ivan Marin
+@email: ispmarin@gmail.com
 '''
-#import matplotlib
+
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
-#import numpy as np
-#from mpl_toolkits.mplot3d import  Axes3D
 
 
 class plotter(object):
