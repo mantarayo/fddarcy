@@ -59,5 +59,5 @@ class advection(object):
             self.c1[self.tot_cells_x - 1,:] = 0
         
             print "time step ", time_step
-        #print self.c1
+        #print self.c2
         print "advected"

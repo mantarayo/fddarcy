@@ -74,7 +74,7 @@ class plotter(object):
             print('No plot for you.')
         plt.close()
         
-    def plot_head_random(self, randomguy):
+    def plot_head_random(self, randomguy,system):
         """
         """
             
@@ -85,6 +85,6 @@ class plotter(object):
             ax.plot(randomguy.particle_time_step[randomguy.total_time - 1][j][0], randomguy.particle_time_step[randomguy.total_time - 1][j][1], 'o')
             #ax.plot(randomguy.particle_time_step[0][j][0], randomguy.particle_time_step[0][j][1], 'o')
         
-        cs = ax.contourf(self.a, self.num_isolines)
-        cs2 = ax.contour(self.a, self.num_isolines, linewidths=0.6, colors='black')
+        cs = ax.contourf(system.space, self.num_isolines)
+        cs2 = ax.contour(system.space, self.num_isolines, linewidths=0.6, colors='black')
         plt.show()

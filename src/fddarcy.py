@@ -8,10 +8,9 @@ Created on 14/10/2012
 @email: ispmarin@gmail.com
 '''
 # import argparse
-# import shapely.geometry as shp
+
 import sys
 import numpy as np
-#import matplotlib.pyplot as plt
 import output
 import aux_func
 import random_walk
@@ -79,13 +78,24 @@ def main():
     deltaT = aux_func.calculate_courant(system.cell_spacing, velx, vely)
     print "deltaT ", deltaT
     adv = advection.advection(deltaT, velx, vely, background_concentration, max_iter_time, system)
+    adv.fixed_boundary_conditions(1, 0)
     adv.do_it_conc()
     
     plotter = output.plotter(system.tot_cells_x, system.tot_cells_y, num_isolines)
     plotter.plot_head('screen', system.space)
     plotter.plot_velocity(velx, vely)
-    plotter.plot_head('screen', adv.c2)
-
+    plotter.plot_head('screen', adv.c1)
+    
+    seed = 1
+    total_time = 100
+    particle_num =  100
+    DL = 0.01
+    DT=0.001
+    init_position = (size_x/2, 1)
+    randd = random_walk.random_walk(seed, deltaT, max_iter_time, particle_num, DL, DT, init_position, system)
+    randd.do_the_walk()
+    plotter.plot_head_random(randd,system)
+    
 if __name__ == "__main__":
     sys.exit(main())
 

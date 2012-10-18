@@ -39,22 +39,21 @@ class random_walk():
                 index_i = aux_func.rounda(self.particle_list[i][0], self.cell_spacing)
                 index_j = aux_func.rounda(self.particle_list[i][1], self.cell_spacing)
                 
-                if index_i >= self.system.tot_cells_x - 1 or index_j >= self.system.tot_cells_y - 1 or index_i <= 0 or index_j <= 0: #reached the borders
+                if index_i >= self.system.tot_cells_x - 1 or index_j >= self.system.tot_cells_y - 1 or index_i <= 0 or index_j <= 0:  # reached the borders
                     break
                 
                 print "index_i, index_j", index_i, index_j
                 
-                vx = self.velx[index_i,index_j]
-                vy = self.vely[index_i,index_j]
-                modv = np.sqrt(vx**2 + vy**2) 
+                vx = self.velx[index_i, index_j]
+                vy = self.vely[index_i, index_j]
+                modv = np.sqrt(vx ** 2 + vy ** 2) 
                 
-                x = self.particle_list[i][0] + vx * self.deltaT + np.sqrt(2.0 * self.DL * self.deltaT)* XL * (vx/modv) - np.sqrt(2.0 * self.DT * self.deltaT) * XT * (vy/modv)
-                y = self.particle_list[i][1] + vy * self.deltaT + np.sqrt(2.0 * self.DL * self.deltaT)* XL * (vy/modv) - np.sqrt(2.0 * self.DT * self.deltaT) * XT * (vx/modv)
+                x = self.particle_list[i][0] + vx * self.deltaT + np.sqrt(2.0 * self.DL * self.deltaT) * XL * (vx / modv) - np.sqrt(2.0 * self.DT * self.deltaT) * XT * (vy / modv)
+                y = self.particle_list[i][1] + vy * self.deltaT + np.sqrt(2.0 * self.DL * self.deltaT) * XL * (vy / modv) - np.sqrt(2.0 * self.DT * self.deltaT) * XT * (vx / modv)
                 
-                #print vx, self.particle_list[i][0], vx * self.deltaT,  np.sqrt(2.0 * self.DL * self.deltaT)* XL * (vx/modv), np.sqrt(2.0 * self.DT * self.deltaT) * XT * (vy/modv)
                 print self.particle_list[i][0], self.particle_list[i][1]
-                self.particle_list[i] = (abs(x),abs(y))
+                self.particle_list[i] = (x, y)
  
             self.particle_time_step.append(self.particle_list)
-            time = time + self.deltaT
+            time = time + 1
         print "finished the random walk"

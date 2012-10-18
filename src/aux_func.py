@@ -7,7 +7,7 @@ Created on 2012-10-17
 import numpy as np
 
 def calculate_courant(cell_spacing,velx,vely):
-    return np.sqrt(0.5)*cell_spacing/(np.sqrt(np.power(np.max(velx),2)) + np.power(np.max(vely),2))
+    return np.sqrt(0.5)*cell_spacing/(np.sqrt(np.power(np.max(velx),2) + np.power(np.max(vely),2)))
 
 def rounda(n, d):
     return (n + d // 2) // d
