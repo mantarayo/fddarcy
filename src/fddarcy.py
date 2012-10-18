@@ -57,47 +57,34 @@ def main():
     size_x = 20
     size_y = 20
     cell_spacing = .25
-    initial_head = 90
+    initial_head = 95
     hydraulic_conduct = 10
     porosity = 0.15
     max_iter = 5000
-    limit_conver = 1e-4
+    max_iter_time = 10
+    limit_conver = 1e-3
     w = 1.9
-    final_time = .03
+    high_head = 100
+    low_head = 90
+    background_concentration = 0
+    num_isolines = 10
     
     system = system_def(size_x, size_y, cell_spacing, initial_head, hydraulic_conduct, porosity, w)
-    system.fixed_boundary_conditions(100,90)
-    #system.line_boundary_conditions(100, 50)
+    system.fixed_boundary_conditions(high_head,low_head)
     
     calculate = flow.calculations(max_iter, limit_conver, system)
     calculate.do_it_SOR(w)
-    aux_func.calculate_velocity(system)
+    velx, vely = aux_func.calculate_velocity(system)
     
-    plotter = output.plotter(system.tot_cells_x, system.tot_cells_y, 10, system.space)
-    plotter.plot_head('screen')
-    
-    velx, vely = aux_func.np_velocity(system)
-    
-    deltaT = system.cell_spacing / (np.sqrt(2.0 * (np.max(velx)**2 + np.max(vely)**2)))
-    
-    max_time_steps = 1#final_time/deltaT
-    print "DeltaT ",deltaT, "max_time_steps ",max_time_steps
-    
-    adv = advection.advection(deltaT, velx, vely, 0.0, max_time_steps, system)
-    adv.fixed_boundary_conditions(1, 0)
+    deltaT = aux_func.calculate_courant(system.cell_spacing, velx, vely)
+    print "deltaT ", deltaT
+    adv = advection.advection(deltaT, velx, vely, background_concentration, max_iter_time, system)
     adv.do_it_conc()
-
-
-    plotter = output.plotter(system.tot_cells_x, system.tot_cells_y, 10, adv.c1)
-    plotter.plot_head('screen')
-
-#    randomguy = random_walk.random_walk(1, 0.25, 2000, 100 ,0.10, 0.010, (20,20), system)
-#    randomguy.do_the_walk()
-#    plotter.plot_head_random(randomguy)
-    #velx, vely = calculate_velocity(system)
-    #plotter.plot_velocity(velx, vely)
-    #velocity(system)
-    #plotter.plot_velocity(system.velx, system.vely)
+    
+    plotter = output.plotter(system.tot_cells_x, system.tot_cells_y, num_isolines)
+    plotter.plot_head('screen', system.space)
+    plotter.plot_velocity(velx, vely)
+    plotter.plot_head('screen', adv.c2)
 
 if __name__ == "__main__":
     sys.exit(main())

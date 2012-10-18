@@ -7,14 +7,14 @@ Created on 15/10/2012
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
-
+import numpy as np
 
 class plotter(object):
     '''
     Class to plot the results
     '''
     
-    def __init__(self, tot_cells_x, tot_cells_y,  num_isoline, space):
+    def __init__(self, tot_cells_x, tot_cells_y,  num_isoline):
         '''
         Constructor
         '''
@@ -22,20 +22,27 @@ class plotter(object):
         self.dim_x = tot_cells_x 
         self.dim_y = tot_cells_y
         self.num_isolines = num_isoline
-        self.a = space
+        
         
     def plot_velocity(self, velx, vely):
         
           
         fig0 = plt.figure()
         ax = fig0.add_subplot(111)
-        ax.quiver(velx, vely)
+        ax.quiver(velx, vely, angles='xy')
         
         plt.show()
         
-      
+    def test_velocity(self):
+        X,Y = np.meshgrid( np.arange(0,10,.2),np.arange(0,10,.2) )
+        U = X
+        V = Y 
+        fig0 = plt.figure()
+        ax = fig0.add_subplot(111)
+        ax.quiver(U, V, anglex='xy')
+        
     
-    def plot_head(self, plot_type):
+    def plot_head(self, plot_type, matrix):
         '''
         Plot the head
         '''
@@ -52,8 +59,8 @@ class plotter(object):
         ax = fig0.add_subplot(111)
         ax.set_xlabel('X (m)')
         ax.set_ylabel('Y (m)')
-        cs = ax.contourf(self.a, self.num_isolines)
-        cs2 = ax.contour(self.a, self.num_isolines, linewidths=0.6, colors='black')
+        cs = ax.contourf(matrix, self.num_isolines)
+        cs2 = ax.contour(matrix, self.num_isolines, linewidths=0.6, colors='black')
         ax.clabel(cs2, inline=1,fontsize=8)
         fig0.colorbar(cs,format=formatter)
         
