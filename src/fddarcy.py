@@ -54,32 +54,39 @@ class system_def():
 
 def main():
    
-    size_x = 10
-    size_y = 10
+    size_x = 20
+    size_y = 20
     cell_spacing = .25
     initial_head = 90
     hydraulic_conduct = 10
     porosity = 0.15
     max_iter = 5000
-    limit_conver = 1e-3
-    w = 0.5
+    limit_conver = 1e-4
+    w = 1.9
+    final_time = .03
+    
     system = system_def(size_x, size_y, cell_spacing, initial_head, hydraulic_conduct, porosity, w)
     system.fixed_boundary_conditions(100,90)
     #system.line_boundary_conditions(100, 50)
     
     calculate = flow.calculations(max_iter, limit_conver, system)
-    #calculate.do_it_SOR(w)
-    calculate.do_it_gauss_seidel()
+    calculate.do_it_SOR(w)
+    #calculate.do_it_gauss_seidel()
     aux_func.calculate_velocity(system)
     
     plotter = output.plotter(system.tot_cells_x, system.tot_cells_y, 10, system.space)
-    plotter.plot_head('screen')
+    #plotter.plot_head('screen')
     
-    velx, vely = aux_func.calculate_velocity(system)
-
+    #velx, vely = aux_func.calculate_velocity(system)
+    velx, vely = aux_func.np_velocity(system)
+    #plotter.plot_velocity(velx, vely)
+    
     deltaT = system.cell_spacing / (np.sqrt(2.0 * (np.max(velx)**2 + np.max(vely)**2)))
-    print deltaT
-    adv = advection.advection(deltaT, velx, vely, 0.0, 1000, system)
+    
+    max_time_steps = 1#final_time/deltaT
+    print "DeltaT ",deltaT, "max_time_steps ",max_time_steps
+    
+    adv = advection.advection(deltaT, velx, vely, 0.0, max_time_steps, system)
     adv.fixed_boundary_conditions(1, 0)
     adv.do_it_conc()
 

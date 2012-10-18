@@ -10,7 +10,7 @@ import numpy as np
 def rounda(n, d):
     return (n + d // 2) // d
 
-def velocity(system):
+def np_velocity(system):
     
     (vely, velx) = np.gradient(system.space)
 
@@ -19,8 +19,8 @@ def velocity(system):
             velx[i, j] = -system.k * velx[i, j] / system.porosity
             vely[i, j] = -system.k * vely[i, j] / system.porosity
     
-    system.set_velocity(velx, vely)
-
+    #system.set_velocity(velx, vely)
+    return velx, vely
 
 def calculate_velocity(system):
     velx = np.zeros((system.tot_cells_x, system.tot_cells_y))

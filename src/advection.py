@@ -19,7 +19,7 @@ class advection(object):
         self.deltaT = deltaT
         self.velx = velx
         self.vely = vely
-        self.max_iter = max_iter
+        self.max_time_steps = max_iter
         self.c1 = np.ones((system.tot_cells_x, system.tot_cells_y)) * background_c
         self.c2 = np.ones((system.tot_cells_x, system.tot_cells_y)) * background_c
         self.tot_cells_x = system.tot_cells_x
@@ -35,21 +35,29 @@ class advection(object):
         
         
     def do_it_conc(self):
-        iter_n = 0
+        time_step = 0
         onespacing = 1.0/4.0
+        courant = 0.5 * self.deltaT / self.cell_spacing 
         print "advecting..."
-        while (iter_n < self.max_iter):
+        while (time_step <= self.max_time_steps):
             for i in xrange(1, self.tot_cells_x - 1):
                 for j in xrange(1, self.tot_cells_y - 1):
-                    
                     self.c2[i,j] = onespacing * (self.c1[i+1,j] + self.c1[i-1,j] + self.c1[i,j+1] + self.c1[i,j-1]) - \
-                    (self.deltaT/(2*self.cell_spacing))*(self.velx[i,j]*(self.c1[i+1,j] - self.c1[i-1,j]) + self.vely[i,j]*(self.c1[i,j+1] - self.c1[i,j-1]))
-                    
-            self.c2[:, 0] = self.c2[:, 1]
-            self.c2[:, self.tot_cells_x - 1] = self.c2[:, self.tot_cells_x - 2]  # for boundary conditions copied from inside to the bourders after the run
+                    courant*(self.velx[i,j]*(self.c1[i+1,j] - self.c1[i-1,j]) + self.vely[i,j]*(self.c1[i,j+1] - self.c1[i,j-1]))
+            
+            #print courant*self.velx[i,j]*(self.c1[i+1,j] - self.c1[i-1,j]), self.vely[i,j]*(self.c1[i,j+1] - self.c1[i,j-1])*courant
+            #self.c2[:,0] = self.c2[:,self.tot_cells_x - 2]
+            #self.c2[:,self.tot_cells_x -1] = self.c2[:,1]        
+            #self.c2[:, 0] = self.c2[:, 1]
+            #self.c2[:, self.tot_cells_x - 1] = self.c2[:, self.tot_cells_x - 2]  # for boundary conditions copied from inside to the bourders after the run
             
             self.c1 = self.c2
             
-            iter_n = iter_n + 1
+            time_step = time_step + 1#self.deltaT
+            
+            self.c1[0,:] = 0 #after the first time step, there's no more injection of concentration 
+            self.c1[self.tot_cells_x - 1,:] = 0
+        
+            print "time step ", time_step
         #print self.c1
         print "advected"
