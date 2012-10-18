@@ -71,15 +71,12 @@ def main():
     
     calculate = flow.calculations(max_iter, limit_conver, system)
     calculate.do_it_SOR(w)
-    #calculate.do_it_gauss_seidel()
     aux_func.calculate_velocity(system)
     
     plotter = output.plotter(system.tot_cells_x, system.tot_cells_y, 10, system.space)
-    #plotter.plot_head('screen')
+    plotter.plot_head('screen')
     
-    #velx, vely = aux_func.calculate_velocity(system)
     velx, vely = aux_func.np_velocity(system)
-    #plotter.plot_velocity(velx, vely)
     
     deltaT = system.cell_spacing / (np.sqrt(2.0 * (np.max(velx)**2 + np.max(vely)**2)))
     

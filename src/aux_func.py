@@ -30,8 +30,10 @@ def calculate_velocity(system):
 
     for i in xrange(1, system.tot_cells_x - 1):
         for j in xrange(1, system.tot_cells_y - 1):
-            velx[i, j] = -constant * (system.space[i, j + 1] - system.space[i, j]) / system.cell_spacing
-            vely[i, j] = -constant * (system.space[i + 1, j] - system.space[i, j]) / system.cell_spacing
+            velx[i, j] = -constant * (system.space[i+1, j ] - system.space[i-1, j]) / (system.cell_spacing*2.0)
+            vely[i, j] = -constant * (system.space[i , j + 1] - system.space[i, j-1]) / (system.cell_spacing*2.0)
+    
+    velx[]
     return velx, vely
 
 
