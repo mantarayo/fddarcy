@@ -11,6 +11,7 @@ import flow
 import aux_func
 import system
 import advection
+import phreeqc_interface
 
 def main():
 
@@ -28,7 +29,8 @@ def main():
     workhorse = system.system_def(dim_x, dim_y, spacing, init_head, k, porosity)
     workhorse.fixed_boundary_conditions(head_up, head_down)   
 
-    
+    phreeq_mod = phreeqc_interface.phreeqc_interface()
+        
     max_iter = 1000
     limit_convergence = 1e-3
     
@@ -63,6 +65,8 @@ def main():
     adv.fixed_boundary_conditions(1, 0)
     adv.do_it_conc()
     plotter.plot_scalar(adv.c2, num_isolines, dim_x, dim_y, spacing, workhorse.n_x, workhorse.n_y)
+    
+
     
 if __name__ == "__main__":
     sys.exit(main())
