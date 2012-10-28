@@ -1,0 +1,25 @@
+# Graphs Ca concentration in equilibrium with calcite
+#  as function of CO2 pressure
+#
+SOLUTION 0 # Calculate the equilibrium line...
+EQUILIBRIUM_PHASES 1
+ Calcite 
+REACTION 1
+ CO2 1; 3.5e-3 in 30
+SELECTED_OUTPUT
+        -file output.sel
+        -molalities Ca+2
+        -molalities CO2 
+END
+
+#SOLUTION 2 # point B in Figure 5.14...
+# pH 7 charge; Ca 1 Calcite; C(4) 1 CO2(g) -1.7
+#END
+
+#SOLUTION 1 # point A in fig 5.14...
+# pH 5.2 charge; Ca 1 Calcite; C(4) 1 CO2(g) -3.5
+#END
+
+#MIX
+# 1 0.5; 2 0.5
+#END

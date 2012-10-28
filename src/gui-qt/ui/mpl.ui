@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>749</width>
+    <height>585</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="RUNButton">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>470</y>
+      <width>74</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Run</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>118</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QSplitter" name="splitter_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Dim Y</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="dim_x"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Dim X</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="dim_y"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QSplitter" name="splitter_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Spacing</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="spacing"/>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>200</y>
+      <width>121</width>
+      <height>147</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Initial and Boundary C</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Head up</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="head_up"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_7">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Head Down</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="head_down"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_9">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>Hid. Conduc.</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="k"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_8">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Porosity</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="n"/>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QRadioButton" name="line_bc">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Line</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="constant_bc">
+         <property name="text">
+          <string>Constant</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>136</width>
+      <height>94</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_13">
+       <property name="text">
+        <string>Flow Simulation Parameters</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_10">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>Max Iter</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="max_iter_flow"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_5">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>w SOR</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="w_SOR"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_11">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>Conver. Limit</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="convergence_limit"/>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>350</y>
+      <width>123</width>
+      <height>179</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QCheckBox" name="do_random_walk">
+       <property name="text">
+        <string>RW AD</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_12">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string>DeltaT</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="deltaT_rw"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_13">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>Max Iter</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="max_iter_rw"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_15">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_17">
+        <property name="text">
+         <string>Longi. Diffusion</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="DL"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_16">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_18">
+        <property name="text">
+         <string>Transv. Diffusion</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="DT"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_14">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>Particle Num</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="particle_num"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_18">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QSplitter" name="splitter_17">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QLabel" name="label_19">
+         <property name="text">
+          <string>Init Pos.</string>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="x_rw"/>
+       </widget>
+       <widget class="QLineEdit" name="y_rw"/>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_5">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>400</y>
+      <width>160</width>
+      <height>128</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <widget class="QCheckBox" name="checkBox_2">
+       <property name="text">
+        <string>FD Advection</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_19">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_20">
+        <property name="text">
+         <string>Background C</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="background_C"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_21">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_22">
+        <property name="text">
+         <string>Initial C</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="initial_C"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSplitter" name="splitter_20">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QLabel" name="label_21">
+        <property name="text">
+         <string>Max Iter</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="max_iter_adv"/>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QRadioButton" name="line_bc_adv">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Line</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="constant_bc_adv">
+         <property name="text">
+          <string>Constant</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="MatplotlibWidget" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>20</y>
+      <width>501</width>
+      <height>371</height>
+     </rect>
+    </property>
+   </widget>
+   <zorder>RUNButton</zorder>
+   <zorder>verticalLayoutWidget</zorder>
+   <zorder>dim_y</zorder>
+   <zorder>label</zorder>
+   <zorder>verticalLayoutWidget_2</zorder>
+   <zorder>label_5</zorder>
+   <zorder>verticalLayoutWidget_3</zorder>
+   <zorder>verticalLayoutWidget_4</zorder>
+   <zorder>deltaT_rw</zorder>
+   <zorder>label_14</zorder>
+   <zorder>splitter_17</zorder>
+   <zorder>y_rw</zorder>
+   <zorder>verticalLayoutWidget_5</zorder>
+   <zorder>label_20</zorder>
+   <zorder>background_C</zorder>
+   <zorder>line_bc_adv</zorder>
+   <zorder>widget</zorder>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>749</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MatplotlibWidget</class>
+   <extends>QWidget</extends>
+   <header>widgets/matplotlibwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
