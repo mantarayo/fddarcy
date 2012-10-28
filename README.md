@@ -11,3 +11,6 @@ The model includes a FD solver with central difference for estationary flow, a r
 ## Output ##
 
 The output uses matplotlib and the output.py, a simplified version of my output routines used in pyaem.
+
+## GUI-Qt ##
+A GUI written in Qt is available to run the simulation. 
