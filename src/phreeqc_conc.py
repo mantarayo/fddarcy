@@ -4,9 +4,9 @@ Created on 22/10/2012
 @author: Ivan Marin
 @contact: ispmarin@gmail.com
 '''
-import copy
-import textwrap
-import time
+#import copy
+#import textwrap
+#import time
 
 import phreeqpy.iphreeqc.phreeqc_dll as phreeqc_mod
 
@@ -21,16 +21,34 @@ class phreeqc_conc(object):
         '''
         self.phreeqc = phreeqc_mod.IPhreeqc()
         self.phreeqc.load_database(r"/home/ispmarin/src/laval/phreeqc-2.18.3/database/phreeqc.dat")
-        print self.load_ph_file(phreeqc_input_file)
         self.phreeqc.run_string(self.load_ph_file(phreeqc_input_file))
         
         #solution initialization
-        components = self.phreeqc.get_component_list()
-        selected_output = self.make_selected_output(components)
-        self.phreeqc.run_string(selected_output)
-        phc_string = "RUN_CELLS; -cells 0\n"
-        self.phreeqc.run_string(phc_string)
+        #components = self.phreeqc.get_component_list()
         
+        selected_output = """
+            SOLUTION 1
+              ph 7 charge
+              temp 25
+             
+              C(4) 1 CO2(g) -3.5
+            
+            EQUILIBRIUM_PHASES    0
+                Calcite    0.0    5
+            
+            SELECTED_OUTPUT 
+               -reset false
+               -totals C(4)
+               -molalities CO2 
+               -molalities HCO3- 
+               -molalities CO3-2 
+               -molalities Ca+2
+            END
+        """
+        
+        self.phreeqc.run_string(selected_output)
+        print self.phreeqc.get_selected_output_array()
+    
     
     def make_selected_output(self,components):
         """
@@ -116,7 +134,6 @@ class phreeqc_conc(object):
         return conc
        
         
-        
-        
+   
         
         
