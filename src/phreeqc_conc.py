@@ -15,13 +15,14 @@ class phreeqc_conc(object):
     classdocs
     '''
 
-    def __init__(self, phreeqc_input_file):
+    def __init__(self):
         '''
         Constructor
         '''
         self.phreeqc = phreeqc_mod.IPhreeqc()
-        self.phreeqc.load_database(r"/home/ispmarin/src/laval/phreeqc-2.18.3/database/phreeqc.dat")
-        self.phreeqc.run_string(self.load_ph_file(phreeqc_input_file))
+        #self.phreeqc.load_database(r"/home/ispmarin/src/laval/phreeqc-2.18.3/database/phreeqc.dat")
+        self.phreeqc.load_database(r"phreeqc.dat")
+        #self.phreeqc.run_string(self.load_ph_file(phreeqc_input_file))
         
         #solution initialization
         #components = self.phreeqc.get_component_list()
