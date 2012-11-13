@@ -40,6 +40,7 @@ class phreeqc_conc(object):
             SELECTED_OUTPUT 
                -reset false
                -totals C(4)
+               -Ph
                -molalities CO2 
                -molalities HCO3- 
                -molalities CO3-2 
@@ -47,10 +48,22 @@ class phreeqc_conc(object):
             END
         """
         
-        self.phreeqc.run_string(selected_output)
+        print self.phreeqc.run_string(selected_output)
         print self.phreeqc.get_selected_output_array()
-    
-    
+        
+        
+        modify_output="""
+        SOLUTION_MODIFY 1
+          -totals
+            Ca    0.1
+        RUN_CELLS
+           -cells 1
+        END
+        """
+        
+        print self.phreeqc.run_string(modify_output)
+        print self.phreeqc.get_selected_output_array()
+        
     def make_selected_output(self,components):
         """
         Build SELECTED_OUTPUT data block
