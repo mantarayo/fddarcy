@@ -48,43 +48,34 @@ class phreeqc_conc(object):
         
         self.phreeqc.run_string(selected_output)
         print self.phreeqc.get_selected_output_array()
+        modify_the_solution = """
+        SOLUTION_MODIFY 1
+           -totals 
+               CO2    0.0
+        
+            RUN_CELLS 1
+        END
+        """
+        self.phreeqc.run_string(modify_the_solution)
+
+        print self.phreeqc.get_selected_output_array()
+        
     
-    
+    def solution_modify(self, concentration):
+        modify_the_solution = """
+        MODIFY 1
+           -totals 
+               CO2   1.0
+            RUN_CELLS 1
+        END
+        """
+        return modify_the_solution
     def make_selected_output(self,components):
         """
         Build SELECTED_OUTPUT data block
         General? NO!
         """
-        
-        headings = "-headings    cb    H    O    "
-        
-        for i in range(len(components)):
-            headings += components[i] + "\t"
-            
-        selected_output = """
-        SELECTED_OUTPUT
-            -reset false
-        USER_PUNCH
-        """
-        
-        selected_output += headings + "\n"
-        #
-        # charge balance, H, and O
-        #
-        code = '10 w = TOT("water")\n'
-        code += '20 PUNCH CHARGE_BALANCE, TOTMOLE("H"), TOTMOLE("O")\n'
-        #
-        # All other elements
-        #
-        lino = 30
-        
-        for component in components:
-            code += '%d PUNCH w*TOT(\"%s\")\n' % (lino, component)
-            lino += 10
-        
-        selected_output += code
-        
-        return selected_output
+
     
     def get_selected_output(self,phreeqc):
         """Return calculation result as dict.
