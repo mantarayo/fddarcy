@@ -30,11 +30,7 @@ class phreeqc_conc(object):
             SOLUTION 1
               ph 7 charge
               temp 25
-             
-              C(4) 1 CO2(g) -3.5
-            
-            EQUILIBRIUM_PHASES    0
-                Calcite    0.0    5
+              C(4) 2.0 as CO2
             
             SELECTED_OUTPUT 
                -reset false
@@ -42,7 +38,7 @@ class phreeqc_conc(object):
                -molalities CO2 
                -molalities HCO3- 
                -molalities CO3-2 
-               -molalities Ca+2
+               
             END
         """
         
@@ -51,9 +47,9 @@ class phreeqc_conc(object):
         modify_the_solution = """
         SOLUTION_MODIFY 1
            -totals 
-               CO2    0.0
-        
-            RUN_CELLS 1
+               C(4)  1.0
+        RUN_CELLS
+           -cells 1
         END
         """
         self.phreeqc.run_string(modify_the_solution)
