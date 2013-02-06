@@ -16,6 +16,7 @@ class flow_calc():
         self.flow_system = flow_system
         self.prev_head = (self.flow_system.init_head + 1) * 1000
         self.error = 0
+        
     def do_it_gauss_seidel(self):
         iter_n = 0
         onespacing = 1.0 / 4.0
@@ -43,7 +44,7 @@ class flow_calc():
     def do_it_SOR(self, w):
         iter_n = 0
         onespacing = 1.0 / 4.0
-        error = 0
+        
         while (iter_n < self.max_time_steps):
             for i in xrange(1, self.flow_system.n_x - 1):
                 for j in xrange(1, self.flow_system.n_y - 1):

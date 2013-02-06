@@ -20,43 +20,11 @@ class phreeqc_conc(object):
         Constructor
         '''
         self.phreeqc = phreeqc_mod.IPhreeqc()
-        self.phreeqc.load_database(r"/home/ispmarin/src/laval/phreeqc-2.18.3/database/phreeqc.dat")
+        self.phreeqc.load_database(r"/home/ispmarin/src/lib/phreeqc-2.18.3/database/phreeqc.dat")
         self.phreeqc.run_string(self.load_ph_file(phreeqc_input_file))
         
-        #solution initialization
-        #components = self.phreeqc.get_component_list()
-        
-        selected_output = """
-            SOLUTION 1
-              ph 7 charge
-              temp 25
-              C(4) 2.0 as CO2
-            
-            SELECTED_OUTPUT 
-               -reset false
-               -totals C(4)
-               -molalities CO2 
-               -molalities HCO3- 
-               -molalities CO3-2 
-               
-            END
-        """
-        
-        self.phreeqc.run_string(selected_output)
         print self.phreeqc.get_selected_output_array()
-        modify_the_solution = """
-        SOLUTION_MODIFY 1
-           -totals 
-               C(4)  1.0
-        RUN_CELLS
-           -cells 1
-        END
-        """
-        self.phreeqc.run_string(modify_the_solution)
 
-        print self.phreeqc.get_selected_output_array()
-        
-    
     def solution_modify(self, concentration):
         modify_the_solution = """
         MODIFY 1

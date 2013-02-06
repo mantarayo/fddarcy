@@ -4,6 +4,7 @@ Created on 19/10/2012
 @author: ispmarin
 '''
 import aux_func
+import phreeqc_conc
 import numpy as np
 
 class system_def():
@@ -20,6 +21,7 @@ class system_def():
         self.init_head = init_head
         self.k = k 
         self.porosity = porosity
+        self.geochemistry  = [[] * dim_x for x in xrange(dim_y)]
         
     def fixed_boundary_conditions(self, concentration_up, concentration_down):
         self.scalar_field[0, :] = concentration_up
@@ -29,3 +31,7 @@ class system_def():
         self.scalar_field[0, :] = np.linspace(head_down, head_up, self.n_x)
         self.scalar_field[self.n_x - 1, :] = head_down
     
+    def set_geochemistry(self, phreeqc_input_file):
+        for i in xrange(self.dim_y):
+            for j in xrange(self.dim_x):
+                self.geochemistry[i].append( phreeqc_conc.phreeqc_conc(phreeqc_input_file))
