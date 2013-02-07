@@ -7,7 +7,6 @@ Created on 22/10/2012
 #import copy
 #import textwrap
 #import time
-
 import phreeqpy.iphreeqc.phreeqc_dll as phreeqc_mod
 
 class phreeqc_conc(object):
@@ -22,32 +21,13 @@ class phreeqc_conc(object):
         self.phreeqc = phreeqc_mod.IPhreeqc()
         self.phreeqc.load_database(r"/home/ispmarin/src/lib/phreeqc-2.18.3/database/phreeqc.dat")
         self.phreeqc.run_string(self.load_ph_file(phreeqc_input_file))
-        
-        print self.phreeqc.get_selected_output_array()
 
-    def solution_modify(self, concentration):
-        modify_the_solution = """
-        MODIFY 1
-           -totals 
-               CO2   1.0
-            RUN_CELLS 1
-        END
-        """
-        return modify_the_solution
-    def make_selected_output(self,components):
-        """
-        Build SELECTED_OUTPUT data block
-        General? NO!
-        """
-
-    
     def get_selected_output(self,phreeqc):
         """Return calculation result as dict.
     
         Header entries are the keys and the columns
         are the values as lists of numbers.
         """
-        
         output = phreeqc.get_selected_output_array()
 
         header = output[0]
@@ -68,7 +48,7 @@ class phreeqc_conc(object):
         
         return ph_file
         
-    def geochem_run(self):
+    def geochem_run(self, transp_conc):
         
         conc = self.get_selected_output(self.phreeqc)
         all_names = conc.keys()

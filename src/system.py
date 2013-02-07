@@ -34,4 +34,5 @@ class system_def():
     def set_geochemistry(self, phreeqc_input_file):
         for i in xrange(self.dim_y):
             for j in xrange(self.dim_x):
-                self.geochemistry[i].append( phreeqc_conc.phreeqc_conc(phreeqc_input_file))
+                self.geochemistry[i][j].append( phreeqc_conc.phreeqc_conc(phreeqc_input_file))
+                

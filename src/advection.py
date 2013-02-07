@@ -35,32 +35,20 @@ class advection(object):
         self.c1[0, :] = concentration_up
         self.c1[self.n_x - 1, :] = concentration_down
         
-        
-    def do_it_conc(self):
-        time_step = 0
+    def advect_step(self):
         onespacing = 1.0/4.0
         courant = 0.5 * self.deltaT / self.spacing 
         print "advecting..."
         
-        while (time_step <= self.max_time_steps):
-            for i in xrange(1, self.n_x - 1):
-                for j in xrange(1, self.n_y - 1):
-                    self.c2[i,j] = onespacing * (self.c1[i+1,j] + self.c1[i-1,j] + self.c1[i,j+1] + self.c1[i,j-1]) - \
-                    courant*(self.velx[i,j]*(self.c1[i,j+1] - self.c1[i,j-1]) + self.vely[i,j]*(self.c1[i+1,j] - self.c1[i-1,j]))
+        for i in xrange(1, self.n_x - 1):
+            for j in xrange(1, self.n_y - 1):
+                self.c2[i,j] = onespacing * (self.c1[i+1,j] + self.c1[i-1,j] + self.c1[i,j+1] + self.c1[i,j-1]) - \
+                courant*(self.velx[i,j]*(self.c1[i,j+1] - self.c1[i,j-1]) + self.vely[i,j]*(self.c1[i+1,j] - self.c1[i-1,j]))
             
-            #print courant*self.velx[i,j]*(self.c1[i+1,j] - self.c1[i-1,j]), self.vely[i,j]*(self.c1[i,j+1] - self.c1[i,j-1])*courant
-            #self.c2[:,0] = self.c2[:,self.n_x - 2]
-            #self.c2[:,self.n_x -1] = self.c2[:,1]        
-            #self.c2[:, 0] = self.c2[:, 1]
-            #self.c2[:, self.n_x - 1] = self.c2[:, self.n_x - 2]  # for boundary conditions copied from inside to the bourders after the run
+        self.c1 = self.c2
+
+
             
-            self.c1 = self.c2
             
-            time_step = time_step + 1
             
-            #self.c1[0,:] = 0 #after the first time step, there's no more injection of concentration 
-            #self.c1[self.n_x - 1,:] = 0
-        
-            print "time step ", time_step
-        #print self.c2
-        print "advected"
+            

@@ -16,8 +16,8 @@ import phreeqc_conc
 
 def main():
 
-    dim_x = 30
-    dim_y = 30
+    dim_x = 10
+    dim_y = 10
     spacing = 0.25
     num_isolines = 20
     init_head = 0
@@ -36,12 +36,24 @@ def main():
     darcy = flow.flow_calc(max_iter, limit_convergence, workhorse)
     darcy.do_it_SOR(w)
 
-    plotter = output.plotter(workhorse.n_x, workhorse.n_y, num_isolines)
-    plotter.plot_scalar(workhorse.scalar_field, num_isolines, dim_x, dim_y, spacing, workhorse.n_x, workhorse.n_y)
+    #plotter = output.plotter(workhorse.n_x, workhorse.n_y, num_isolines)
+    #plotter.plot_scalar(workhorse.scalar_field, num_isolines, dim_x, dim_y, spacing, workhorse.n_x, workhorse.n_y)
     
     velx, vely = aux_func.calculate_velocity(workhorse.n_x, workhorse.n_y, spacing, workhorse.scalar_field)
-    plotter.plot_velocity(velx, vely, dim_x, dim_y, workhorse.n_x, workhorse.n_y)
+    #plotter.plot_velocity(velx, vely, dim_x, dim_y, workhorse.n_x, workhorse.n_y)
     
+
+    
+    deltaT = aux_func.calculate_courant(spacing, velx, vely)
+    background_c = 0
+    max_iter = 10
+    adv = advection.advection(deltaT, velx, vely, background_c, max_iter, workhorse)
+    adv.fixed_boundary_conditions(1, 0)
+    adv.advect_step()
+    #plotter.plot_scalar(adv.c2, num_isolines, dim_x, dim_y, spacing, workhorse.n_x, workhorse.n_y)
+#    
+#    
+
 
 #    deltaT = 0.5#calculate_courant(spacing, velx, vely)
 #    print deltaT
@@ -55,16 +67,6 @@ def main():
 #                                    DL, DT, init_position, spacing, velx, vely, workhorse.n_x, workhorse.n_y,workhorse.scalar_field, dim_x, dim_y)
 #    randd.do_the_walk()
 #    #plotter.plot_head_random(randd,scalar_field)
-#    
-#    deltaT = aux_func.calculate_courant(spacing, velx, vely)
-#    background_c = 0
-#    max_iter = 10
-#    adv = advection.advection(deltaT, velx, vely, background_c, max_iter, workhorse)
-#    adv.fixed_boundary_conditions(1, 0)
-#    adv.do_it_conc()
-#    #plotter.plot_scalar(adv.c2, num_isolines, dim_x, dim_y, spacing, workhorse.n_x, workhorse.n_y)
-#    
-#    
     
 if __name__ == "__main__":
     sys.exit(main())

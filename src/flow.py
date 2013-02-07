@@ -31,9 +31,7 @@ class flow_calc():
             self.flow_system.scalar_field[:,0] = self.flow_system.scalar_field[:,self.flow_system.n_x - 2]
             self.flow_system.scalar_field[:,self.flow_system.n_x -1] = self.flow_system.scalar_field[:,1]
                     
-            #self.flow_system.space[:, 0] = self.flow_system.space[:, 1]
-            #self.flow_system.space[:, self.flow_system.n_x - 1] = self.flow_system.space[:, self.flow_system.n_x - 2]  # for boundary conditions copied from inside to the bourders after the run
-
+            
             iter_n = iter_n + 1
             
             if iter_n % 5 == 0:
@@ -55,15 +53,13 @@ class flow_calc():
              
             self.flow_system.scalar_field[:,0] = self.flow_system.scalar_field[:,self.flow_system.n_x - 2]
             self.flow_system.scalar_field[:,self.flow_system.n_x -1] = self.flow_system.scalar_field[:,1]        
-            #self.flow_system.space[:, 0] = self.flow_system.space[:, 1]
-            #self.flow_system.space[:, self.flow_system.n_x - 1] = self.flow_system.space[:, self.flow_system.n_x - 2]  # for boundary conditions copied from inside to the bourders after the run
-
+            
             iter_n = iter_n + 1
             
             if iter_n % 5 == 0:
                 print "iteration ", iter_n, "error ", self.error
                 if self.check_convergence():
-                    print "total iterations: ", iter_n, "error ", self.error
+                    print "total iterations: ", iter_n
                     break
                     
                     
