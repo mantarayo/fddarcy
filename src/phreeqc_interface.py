@@ -7,7 +7,7 @@ Created on 22/10/2012
 #import copy
 #import textwrap
 #import time
-import phreeqpy.iphreeqc.phreeqc_dll as phreeqc_mod
+import phreeqpy.iphreeqc.phreeqc_dll as phreeqc_mod 
 
 class phreeqc_interface(object):
     '''
@@ -23,8 +23,8 @@ class phreeqc_interface(object):
         self.phreeqc.run_string(open(phreeqc_input_file, 'r').read())
         self.phreeqc.run_string(self.set_selected_output())
         self.run_model()
-        self.all_names = self.get_selected_output().keys()
-        
+        self.get_selected_output()
+
         
     def run_model(self):
         phc_string = "RUN_CELLS; -cells 1\n"
@@ -74,7 +74,7 @@ class phreeqc_interface(object):
             for col, head in enumerate(header):
                 conc[head].append(row[col])
         
-        print conc
+        #print conc
         return conc
         
     def geochem_modify(self, transp_conc):

@@ -21,7 +21,7 @@ class system_def():
         self.init_head = init_head
         self.k = k 
         self.porosity = porosity
-        self.geochemistry  = [[] * dim_x for x in xrange(dim_y)]
+        self.geochemistry  = [[] * self.n_x for x in xrange(self.n_y)]
         
     def fixed_boundary_conditions(self, concentration_up, concentration_down):
         self.scalar_field[0, :] = concentration_up
@@ -32,7 +32,7 @@ class system_def():
         self.scalar_field[self.n_x - 1, :] = head_down
     
     def set_geochemistry(self, phreeqc_input_file):
-        for i in xrange(self.dim_y):
-            for j in xrange(self.dim_x):
+        for i in xrange(self.n_y):
+            for j in xrange(self.n_x):
                 self.geochemistry[i].append( phreeqc_interface.phreeqc_interface(phreeqc_input_file))
                 
