@@ -6,6 +6,8 @@ Created on 15/10/2012
 '''
 
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
 from matplotlib.ticker import FuncFormatter
 import numpy as np
 
@@ -53,11 +55,18 @@ class plotter(object):
         y_axis = np.linspace(0,dim_y,num=n_y)
         
         fig0 = plt.figure()
+        
         ax = fig0.add_subplot(111)
         cs = ax.contourf(x_axis, y_axis, scalar_field, num_isolines)
         ax.contour(x_axis, y_axis,scalar_field, num_isolines, linewidths=0.6, colors='black')
         fig0.colorbar(cs,format=formatter)
-
+        
+        
+        fig1 = plt.figure()
+        X, Y = np.meshgrid(x_axis, y_axis)
+        ax2 =  fig1.gca(projection='3d')
+        surf = ax2.plot_surface(X, Y, scalar_field, rstride=1, cstride=1, cmap=cm.cool, linewidth=0, antialiased=False)
+   
         plt.show()
         plt.close()
 

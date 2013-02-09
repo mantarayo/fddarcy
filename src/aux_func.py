@@ -29,7 +29,7 @@ def calculate_velocity(n_x, n_y, spacing, scalar_field):
     
     #velx[:,0] = (velx[:,1] - velx[:,0]) / spacing
     #vely[0,:] = (vely[1,:] - vely[0,:]) / spacing
-    print vely
+    
     return velx, vely
 
 def generate_scalar_field(n_x, n_y, scalar_field):

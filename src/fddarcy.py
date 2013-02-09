@@ -17,31 +17,33 @@ import transport
 
 def main():
 
-    dim_x = 2
-    dim_y = 2
-    spacing = 1
+    dim_x = 10
+    dim_y = 10
+    spacing = 0.25
     num_isolines = 20
-    init_head = 0
+    init_head = 1
     k = 1
     porosity = 1
-    w = 1.9
-    head_up = 100
-    head_down = 80
-    max_iter = 1000
+    w = 1.8
+    head_up = 1
+    head_down = 0
+    head_left = 1
+    head_right = 1
+
+    max_iter = 1500
     limit_convergence = 1e-3
 
     workhorse = system.system_def(dim_x, dim_y, spacing, init_head, k, porosity)
-    workhorse.fixed_boundary_conditions(head_up, head_down)   
+    workhorse.fixed_boundary_conditions(head_up, head_down,head_left, head_right )   
     workhorse.set_geochemistry('xylene.phrq')
-   
-    #darcy = flow.flow_calc(max_iter, limit_convergence, workhorse)
-    #darcy.do_it_SOR(w)
-
     plotter = output.plotter(workhorse.n_x, workhorse.n_y, num_isolines)
-    #plotter.plot_scalar(workhorse.scalar_field, num_isolines, dim_x, dim_y, spacing, workhorse.n_x, workhorse.n_y)
+    
+    darcy = flow.flow_calc(max_iter, limit_convergence, workhorse)
+    darcy.do_it_gauss_seidel()
+    plotter.plot_scalar(workhorse.scalar_field, num_isolines, dim_x, dim_y, spacing, workhorse.n_x, workhorse.n_y)
     
     velx, vely = aux_func.calculate_velocity(workhorse.n_x, workhorse.n_y, spacing, workhorse.scalar_field)
-    #plotter.plot_velocity(velx, vely, dim_x, dim_y, workhorse.n_x, workhorse.n_y)
+    plotter.plot_velocity(velx, vely, dim_x, dim_y, workhorse.n_x, workhorse.n_y)
     
 
     

@@ -22,15 +22,20 @@ class system_def():
         self.k = k 
         self.porosity = porosity
         self.geochemistry  = [[] * self.n_x for x in xrange(self.n_y)]
+        print "dimensions: ", self.dim_x, self.dim_y, self.n_x, self.n_y
         
-    def fixed_boundary_conditions(self, concentration_up, concentration_down):
-        self.scalar_field[0, :] = concentration_up
-        self.scalar_field[self.n_x - 1, :] = concentration_down
-
-    def line_boundary_conditions(self, head_up, head_down):
+    def fixed_boundary_conditions(self, head_up, head_down, head_left, head_right):
+        self.scalar_field[0, :] = head_up
+        self.scalar_field[self.n_x - 1, :] = head_down
+        self.scalar_field[:,0] = head_left
+        self.scalar_field[:,self.n_y - 1] = head_right
+        
+    def line_boundary_conditions(self, head_up, head_down, head_left, head_right):
         self.scalar_field[0, :] = np.linspace(head_down, head_up, self.n_x)
         self.scalar_field[self.n_x - 1, :] = head_down
-    
+        self.scalar_field[:,0] = head_left
+        self.scalar_field[:,self.n_y - 1] = head_right
+        
     def set_geochemistry(self, phreeqc_input_file):
         for i in xrange(self.n_y):
             for j in xrange(self.n_x):

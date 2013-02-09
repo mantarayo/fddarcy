@@ -31,9 +31,9 @@ class advection(object):
         self.conc[0, :] = np.linspace(conc_down, conc_up, self.n_x)
         self.conc[self.n_x - 1, :] = conc_down
         
-    def fixed_boundary_conditions(self, concentration_up, concentration_down):
-        self.conc[0, :] = concentration_up
-        self.conc[self.n_x - 1, :] = concentration_down
+    def fixed_boundary_conditions(self, head_up, head_down):
+        self.conc[0, :] = head_up
+        self.conc[self.n_x - 1, :] = head_down
         
     def advect_step(self, extern_conc):
         onespacing = 1.0/4.0
