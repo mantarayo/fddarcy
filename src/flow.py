@@ -6,6 +6,8 @@ Created on 2012-10-17
 '''
 
 import numpy as np
+from scipy import weave
+
 
 class flow_calc():
     """
@@ -30,27 +32,32 @@ class flow_calc():
             
                     
             #Toroidal conditions
-            #self.flow.scalar_field[:,0] = self.flow.scalar_field[:,self.flow.n_x - 2]
-            #self.flow.scalar_field[:,self.flow.n_x -1] = self.flow.scalar_field[:,1]
+            self.flow.scalar_field[:,0] = self.flow.scalar_field[:,self.flow.n_x - 2]
+            self.flow.scalar_field[:,self.flow.n_x -1] = self.flow.scalar_field[:,1]
                     
             
             iter_n = iter_n + 1
             
-            if iter_n % 5 == 0:
+            if iter_n % 10 == 0:
                 #print "iteration ", iter_n, "error ", self.error
                 if self.check_convergence():
                     print "total iterations: ", iter_n
                     break
                 
-    def using_numpy(self): #HOLY COW
+    def jacobi_numpy(self): #HOLY COW 
         iter_n = 0
-        print "range", self.flow.n_y , self.flow.n_x 
+        #print "range", self.flow.n_y , self.flow.n_x 
+        
         while (iter_n < self.max_time_steps):
             self.flow.scalar_field[1:-1, 1:-1] = (self.flow.scalar_field[2:, 1:-1]
                                                           + self.flow.scalar_field[:-2, 1:-1]+
                                                           self.flow.scalar_field[1:-1, 2:] +
                                                           self.flow.scalar_field[1:-1, :-2] )/4.
                                                           
+            
+            self.flow.scalar_field[:,0] = self.flow.scalar_field[:,self.flow.n_x - 2]
+            self.flow.scalar_field[:,self.flow.n_x -1] = self.flow.scalar_field[:,1]
+            
             iter_n = iter_n + 1
             
             if iter_n % 10 == 0:
@@ -59,7 +66,30 @@ class flow_calc():
                     print "total iterations: ", iter_n
                     break
             
+    def jacobi_weaver(self): #NOT WORKING
+        iter_n = 0
+        #print "range", self.flow.n_y , self.flow.n_x 
+        field = self.flow.scalar_field
+        while (iter_n < self.max_time_steps):
+            expr = "field[1:-1, 1:-1] = (field[2:, 1:-1] "\
+                                                          "+ field[:-2, 1:-1]+"\
+                                                          "field[1:-1, 2:] +"\
+                                                          "field[1:-1, :-2] )/4."                                       
             
+            weave.blitz(expr, check_size=0)
+            
+            field[:,0] = field[:,self.flow.n_x - 2]
+            field[:,self.flow.n_x -1] = field[:,1]
+            
+            iter_n = iter_n + 1
+            
+            if iter_n % 10 == 0:
+                #print "iteration ", iter_n, "error ", self.error
+                if self.check_convergence():
+                    self.flow.scalar_field = field
+                    print "total iterations: ", iter_n
+                    break
+                
             
     def do_it_SOR(self, w):
         iter_n = 0

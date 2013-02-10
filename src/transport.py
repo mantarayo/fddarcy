@@ -8,16 +8,20 @@ import numpy as np
 
 class transport_reaction(object):
     
-    def __init__(self, max_t, time_s):
-        self.max_time = max_t
-        self.time_step = time_s
-        self.max_time_steps = int(np.rint(self.max_time / self.time_step))
+    def __init__(self):
+       pass
+   
+    def transport_only(self, advection, conc):
         
-    def transport_only(self, advection_field, conc):
+        for t in xrange(advection.max_time_steps):     
+            advection.advect_step_numpy(conc)
+            t = t + 1
         
-        advection_field.advect_step_numpy(conc)
-        for t in xrange(self.max_time_steps):     
-            advection_field.advect_step_numpy(conc)
+    
+    def transport_only_old(self, advection_field):
+        
+        for t in xrange(advection_field.max_time_steps):     
+            advection_field.advect_step()
             t = t + 1
         
     

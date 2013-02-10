@@ -6,6 +6,9 @@ Created on 2012-10-17
 '''
 
 import numpy as np
+import shapely
+import shapely.geometry
+
 
 class advection(object):
     '''
@@ -27,6 +30,9 @@ class advection(object):
         self.n_y = workhorse.n_y
         self.spacing = workhorse.spacing
         self.courant = 0.5 * self.deltaT / self.spacing 
+        print "max_time_steps ", self.max_time_steps, "courant ", self.courant
+        
+        
     def line_boundary_conditions(self, conc_up, conc_down):
         self.conc[0, :] = np.linspace(conc_down, conc_up, self.n_x)
         self.conc[self.n_x - 1, :] = conc_down
@@ -36,19 +42,33 @@ class advection(object):
         self.conc[self.n_x - 1, :] = head_down
         self.conc[:,0] = head_left
         self.conc[:,self.n_y - 1] = head_right
+    
+    def set_region_bc(self, x_ini, y_ini, x_end, y_end, conc):
+        pos_x_ini = int(x_ini / self.spacing)
+        pos_y_ini = int(y_ini / self.spacing)
         
-    def advect_step(self, extern_conc):
+        pos_x_end = int(x_end / self.spacing)
+        pos_y_end = int(y_end / self.spacing)
+        
+        print x_ini, y_ini, x_end, y_end, pos_x_ini, pos_y_ini, pos_x_end, pos_y_end
+        
+        for i in xrange(pos_y_ini, pos_y_end):
+            for j in xrange(pos_x_ini, pos_y_end):
+                self.conc[i,j] = conc
+                
+        
+        
+    def advect_step(self):
         onespacing = 1.0/4.0
-        courant = 0.5 * self.deltaT / self.spacing 
+
         #print "advecting..."
         
         for i in xrange(1, self.n_x - 1):
             for j in xrange(1, self.n_y - 1):
-                self.conc[i,j] = onespacing * (extern_conc[i+1,j] + extern_conc[i-1,j] + extern_conc[i,j+1] + extern_conc[i,j-1]) - \
-                courant*(self.velx[i,j]*(extern_conc[i,j+1] - extern_conc[i,j-1]) + self.vely[i,j]*(extern_conc[i+1,j] - extern_conc[i-1,j]))
+                self.conc[i,j] = onespacing * (self.conc[i+1,j] + self.conc[i-1,j] + self.conc[i,j+1] + self.conc[i,j-1]) - \
+                self.courant*(self.velx[i,j]*(self.conc[i,j+1] - self.conc[i,j-1]) + self.vely[i,j]*(self.conc[i+1,j] - self.conc[i-1,j]))
             
-        extern_conc = self.conc
-
+        
     def advect_step_numpy(self, extern_conc):
         
         #print "advecting..."
