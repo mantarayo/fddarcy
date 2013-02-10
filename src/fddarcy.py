@@ -27,34 +27,34 @@ def main():
     w = 1.8
     head_up = 1
     head_down = 0
-    head_left = 1
-    head_right = 1
+    head_left = 0
+    head_right = 0
 
-    max_iter = 1500
-    limit_convergence = 1e-3
+    max_iter = 2500
+    limit_convergence = 1e-5
 
     workhorse = system.system_def(dim_x, dim_y, spacing, init_head, k, porosity)
     workhorse.fixed_boundary_conditions(head_up, head_down,head_left, head_right )   
-    workhorse.set_geochemistry('xylene.phrq')
+    #workhorse.set_geochemistry('xylene.phrq')
     plotter = output.plotter(workhorse.n_x, workhorse.n_y, num_isolines)
     
     darcy = flow.flow_calc(max_iter, limit_convergence, workhorse)
-    darcy.do_it_gauss_seidel()
+    #darcy.do_it_gauss_seidel()
+    darcy.using_numpy()
     plotter.plot_scalar(workhorse.scalar_field, num_isolines, dim_x, dim_y, spacing, workhorse.n_x, workhorse.n_y)
     
     velx, vely = aux_func.calculate_velocity(workhorse.n_x, workhorse.n_y, spacing, workhorse.scalar_field)
     plotter.plot_velocity(velx, vely, dim_x, dim_y, workhorse.n_x, workhorse.n_y)
-    
-
-    
+        
     deltaT = aux_func.calculate_courant(spacing, velx, vely)
     background_c = 0
     max_iter = 10
     adv = advection.advection(deltaT, velx, vely, background_c, max_iter, workhorse)
-    adv.fixed_boundary_conditions(1, 0)
+    adv.fixed_boundary_conditions(1, 0, 0, 0)
     
-    transport_stuff = transport.transport_reaction(100,0.1)
-    transport_stuff.transport_this(adv, workhorse.geochemistry, workhorse)
+    transport_stuff = transport.transport_reaction(1000,0.1)
+    transport_stuff.transport_only(adv, adv.conc)
+    #transport_stuff.transport_geochemistry(adv, workhorse.geochemistry, workhorse)
     plotter.plot_scalar(adv.conc, num_isolines, dim_x, dim_y, spacing, workhorse.n_x, workhorse.n_y)
 
 
