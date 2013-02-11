@@ -25,17 +25,17 @@ class system_def():
         print "Dimensions x ", self.dim_x, " y ", self.dim_y," n pts x ", self.n_x," n pts y ", self.n_y
         
     def fixed_boundary_conditions(self, head_up, head_down, head_left, head_right):
+        self.scalar_field[:,0] = head_left
+        self.scalar_field[:,self.n_y - 1] = head_right
         self.scalar_field[0, :] = head_up
         self.scalar_field[self.n_x - 1, :] = head_down
-        self.scalar_field[:,0] = head_left
-        self.scalar_field[:,self.n_y - 1] = head_right
-        
+    
     def line_boundary_conditions(self, head_up, head_down, head_left, head_right):
-        self.scalar_field[0, :] = np.linspace(head_down, head_up, self.n_x)
-        self.scalar_field[self.n_x - 1, :] = head_down
         self.scalar_field[:,0] = head_left
         self.scalar_field[:,self.n_y - 1] = head_right
-        
+        self.scalar_field[0, :] = np.linspace(head_down, head_up, self.n_x)
+        self.scalar_field[self.n_x - 1, :] = head_down       
+
     def set_geochemistry(self, phreeqc_input_file):
         for i in xrange(self.n_y):
             for j in xrange(self.n_x):

@@ -23,7 +23,7 @@ def main():
     init_head = 1
     k = 1
     porosity = 1
-    head_up = 1
+    head_up = 10
     head_down = 0
     head_left = 0
     head_right = 0
@@ -32,10 +32,11 @@ def main():
     deltaT = 0.125#aux_func.calculate_courant(spacing, velx, vely)
     background_c = 0
     toroidal = 1
-    adv_time_iter = 500
+    adv_time_iter = 50
   
     workhorse = system.system_def(dim_x, dim_y, spacing, init_head, k, porosity)
     workhorse.fixed_boundary_conditions(head_up, head_down,head_left, head_right )   
+    #workhorse.line_boundary_conditions(head_up, head_down, head_left, head_right)
     #workhorse.set_geochemistry('xylene.phrq')
     
     darcy = flow.flow_calc(max_iter, limit_convergence, workhorse, toroidal)
