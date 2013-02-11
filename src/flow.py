@@ -12,15 +12,16 @@ from scipy import weave
 class flow_calc():
     """
     """
-    def __init__(self, max_iter, limit_convergence, flow_system):
+    def __init__(self, max_iter, limit_convergence, flow_system, toroid):
         self.max_time_steps = max_iter
         self.tolerance = limit_convergence
         self.flow = flow_system
         self.error_matrix = np.zeros((self.flow.n_x, self.flow.n_y))
         self.error = 0
+        self.toroidal = toroid
         print "Flow: max_time_steps: ", self.max_time_steps, " Tolerance: ", self.tolerance 
         
-    def do_it_gauss_seidel(self, toroidal):
+    def do_it_gauss_seidel(self):
         iter_n = 0
 
         print "range", self.flow.n_y , self.flow.n_x 
@@ -31,7 +32,7 @@ class flow_calc():
                      + self.flow.scalar_field[i + 1, j] + self.flow.scalar_field[i, j + 1])/4.
             
             #Toroidal conditions
-            if toroidal:        
+            if self.toroidal:        
                 self.flow.scalar_field[:,0] = self.flow.scalar_field[:,self.flow.n_x - 2]
                 self.flow.scalar_field[:,self.flow.n_x -1] = self.flow.scalar_field[:,1]
                     
@@ -43,8 +44,10 @@ class flow_calc():
                 if self.check_convergence():
                     print "total iterations: ", iter_n
                     break
-                
-    def jacobi_numpy(self, toroidal): #HOLY COW 
+        if iter_n == self.max_time_steps:
+            print "Not converged, error ", self.error   
+                 
+    def jacobi_numpy(self): #HOLY COW 
         iter_n = 0
         print "Doing Jacobi Numpy"
         
@@ -54,7 +57,7 @@ class flow_calc():
                                                           self.flow.scalar_field[1:-1, 2:] +
                                                           self.flow.scalar_field[1:-1, :-2] )/4.
             #Toroidal conditions
-            if toroidal:
+            if self.toroidal:
                 self.flow.scalar_field[:,0] = self.flow.scalar_field[:,self.flow.n_x - 2]
                 self.flow.scalar_field[:,self.flow.n_x -1] = self.flow.scalar_field[:,1]
             
@@ -65,8 +68,10 @@ class flow_calc():
                 if self.check_convergence():
                     print "total iterations: ", iter_n
                     break
-            
-    def jacobi_weaver(self, toroidal): 
+        if iter_n == self.max_time_steps:
+            print "Not converged, error ", self.error   
+           
+    def jacobi_weaver(self): 
         iter_n = 0
         print "Doing Jacobi Weaver"
         field = self.flow.scalar_field
@@ -79,19 +84,22 @@ class flow_calc():
             
             weave.blitz(expr, check_size=0)
             #Toroidal conditions
-            if toroidal:
+            if self.toroidal:
                 field[:,0] = field[:,self.flow.n_x - 2]
                 field[:,self.flow.n_x -1] = field[:,1]
             
             iter_n = iter_n + 1
             
             if iter_n % 10 == 0:
-                #print "iteration ", iter_n, "error ", self.error
+                print "iteration ", iter_n, "error ", self.error
                 if self.check_convergence():
                     self.flow.scalar_field = field
                     print "total iterations: ", iter_n
                     break
                 
+        if iter_n == self.max_time_steps:
+            print "Not converged, error ", self.error   
+           
             
     def do_it_SOR(self, w):
         iter_n = 0
@@ -113,7 +121,6 @@ class flow_calc():
                 if self.check_convergence():
                     print "total iterations: ", iter_n
                     break
-                    
                     
     def check_convergence(self):
         self.error_matrix = np.abs(self.flow.scalar_field - self.error_matrix)

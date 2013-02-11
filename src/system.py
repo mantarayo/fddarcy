@@ -22,7 +22,7 @@ class system_def():
         self.k = k 
         self.porosity = porosity
         self.geochemistry  = [[] * self.n_x for x in xrange(self.n_y)]
-        print "dimensions: ", self.dim_x, self.dim_y, self.n_x, self.n_y
+        print "Dimensions x ", self.dim_x, " y ", self.dim_y," n pts x ", self.n_x," n pts y ", self.n_y
         
     def fixed_boundary_conditions(self, head_up, head_down, head_left, head_right):
         self.scalar_field[0, :] = head_up

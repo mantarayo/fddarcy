@@ -6,8 +6,6 @@ Created on 2012-10-17
 '''
 
 import numpy as np
-import shapely
-import shapely.geometry 
 
 
 class advection(object):
@@ -48,23 +46,18 @@ class advection(object):
     def set_region_bc(self, x_ini, y_ini, x_end, y_end, conc):
         pos_x_ini = int(x_ini / self.spacing)
         pos_y_ini = int(y_ini / self.spacing)
-        
         pos_x_end = int(x_end / self.spacing)
         pos_y_end = int(y_end / self.spacing)
         
-        print x_ini, y_ini, x_end, y_end, pos_x_ini, pos_y_ini, pos_x_end, pos_y_end
+        #print x_ini, y_ini, x_end, y_end, pos_x_ini, pos_y_ini, pos_x_end, pos_y_end
         
         for i in xrange(pos_y_ini, pos_y_end):
-            for j in xrange(pos_x_ini, pos_y_end):
+            for j in xrange(pos_x_ini, pos_x_end):
                 self.conc[i,j] = conc
                 
         
         
     def advect_step(self):
-        
-
-        #print "advecting..."
-        
         for i in xrange(1, self.n_x - 1):
             for j in xrange(1, self.n_y - 1):
                 self.conc[i,j] =  (self.conc[i+1,j] + self.conc[i-1,j] + self.conc[i,j+1] + self.conc[i,j-1])/4. - \
@@ -72,13 +65,8 @@ class advection(object):
             
         
     def advect_step_numpy(self):
-        
-        #print "advecting..."
-            
         self.conc[1:-1, 1:-1] = (self.conc[2:, 1:-1] + self.conc[:-2, 1:-1]+ self.conc[1:-1, 2:] +  self.conc[1:-1, :-2] )/4. - \
         self.courant * ( self.velx[1:-1,1:-1] *(self.conc[2:,1:-1] - self.conc[:-2,1:-1]  ) + self.vely[1:-1,1:-1]*( self.conc[1:-1,2:] - self.conc[1:-1,:-2]  )   )
         
-        
-        extern_conc = self.conc
             
             
