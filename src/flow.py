@@ -68,6 +68,7 @@ class flow_calc():
                 if self.check_convergence():
                     print "total iterations: ", iter_n
                     break
+        
         if iter_n == self.max_time_steps:
             print "Not converged, error ", self.error   
            
@@ -89,11 +90,11 @@ class flow_calc():
                 field[:,self.flow.n_x -1] = field[:,1]
             
             iter_n = iter_n + 1
-            
+            self.flow.scalar_field = field
             if iter_n % 10 == 0:
                 print "iteration ", iter_n, "error ", self.error
                 if self.check_convergence():
-                    self.flow.scalar_field = field
+                    
                     print "total iterations: ", iter_n
                     break
                 

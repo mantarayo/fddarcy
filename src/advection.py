@@ -49,8 +49,6 @@ class advection(object):
         pos_x_end = int(x_end / self.spacing)
         pos_y_end = int(y_end / self.spacing)
         
-        #print x_ini, y_ini, x_end, y_end, pos_x_ini, pos_y_ini, pos_x_end, pos_y_end
-        
         for i in xrange(pos_y_ini, pos_y_end):
             for j in xrange(pos_x_ini, pos_x_end):
                 self.conc[i,j] = conc
@@ -61,12 +59,12 @@ class advection(object):
         for i in xrange(1, self.n_x - 1):
             for j in xrange(1, self.n_y - 1):
                 self.conc[i,j] =  (self.conc[i+1,j] + self.conc[i-1,j] + self.conc[i,j+1] + self.conc[i,j-1])/4. - \
-                self.courant * (self.velx[i,j]*(self.conc[i+1,j] - self.conc[i-1,j]) + self.vely[i,j]*(self.conc[i,j+1] - self.conc[i,j-1]))
+                self.courant * (self.velx[i,j]*(self.conc[i,j+1] - self.conc[i,j-1]) + self.vely[i,j]*(self.conc[i+1,j] - self.conc[i-1,j]))
             
         
     def advect_step_numpy(self):
         self.conc[1:-1, 1:-1] = (self.conc[2:, 1:-1] + self.conc[:-2, 1:-1]+ self.conc[1:-1, 2:] +  self.conc[1:-1, :-2] )/4. - \
-        self.courant * ( self.velx[1:-1,1:-1] *(self.conc[2:,1:-1] - self.conc[:-2,1:-1]  ) + self.vely[1:-1,1:-1]*( self.conc[1:-1,2:] - self.conc[1:-1,:-2]  )   )
+        self.courant * ( self.vely[1:-1,1:-1]*(self.conc[2:,1:-1] - self.conc[:-2,1:-1]  ) + self.velx[1:-1,1:-1] *( self.conc[1:-1,2:] - self.conc[1:-1,:-2]  )   )
         
             
             

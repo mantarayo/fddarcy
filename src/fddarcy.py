@@ -27,12 +27,12 @@ def main():
     head_down = 0
     head_left = 0
     head_right = 0
-    max_iter = 9500
+    max_iter = 30000
     limit_convergence = 1e-5
     deltaT = 0.125#aux_func.calculate_courant(spacing, velx, vely)
     background_c = 0
     toroidal = 1
-    adv_time_iter = 100
+    adv_time_iter = 500
   
     workhorse = system.system_def(dim_x, dim_y, spacing, init_head, k, porosity)
     workhorse.fixed_boundary_conditions(head_up, head_down,head_left, head_right )   
