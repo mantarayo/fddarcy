@@ -18,22 +18,22 @@ class flow_calc():
         self.flow = flow_system
         self.error_matrix = np.zeros((self.flow.n_x, self.flow.n_y))
         self.error = 0
+        print "Flow: max_time_steps: ", self.max_time_steps, " Tolerance: ", self.tolerance 
         
-    def do_it_gauss_seidel(self):
+    def do_it_gauss_seidel(self, toroidal):
         iter_n = 0
-        onespacing = 1.0 / 4.0
+
         print "range", self.flow.n_y , self.flow.n_x 
         while (iter_n < self.max_time_steps):
             for i in xrange(1, self.flow.n_y - 1 ):
                 for j in xrange(1, self.flow.n_x - 1 ):
-                    self.flow.scalar_field[i, j] = onespacing * \
-                    (self.flow.scalar_field[i - 1, j] + self.flow.scalar_field[i, j - 1] 
-                     + self.flow.scalar_field[i + 1, j] + self.flow.scalar_field[i, j + 1])
+                    self.flow.scalar_field[i, j] = (self.flow.scalar_field[i - 1, j] + self.flow.scalar_field[i, j - 1] 
+                     + self.flow.scalar_field[i + 1, j] + self.flow.scalar_field[i, j + 1])/4.
             
-                    
             #Toroidal conditions
-            self.flow.scalar_field[:,0] = self.flow.scalar_field[:,self.flow.n_x - 2]
-            self.flow.scalar_field[:,self.flow.n_x -1] = self.flow.scalar_field[:,1]
+            if toroidal:        
+                self.flow.scalar_field[:,0] = self.flow.scalar_field[:,self.flow.n_x - 2]
+                self.flow.scalar_field[:,self.flow.n_x -1] = self.flow.scalar_field[:,1]
                     
             
             iter_n = iter_n + 1
@@ -44,19 +44,19 @@ class flow_calc():
                     print "total iterations: ", iter_n
                     break
                 
-    def jacobi_numpy(self): #HOLY COW 
+    def jacobi_numpy(self, toroidal): #HOLY COW 
         iter_n = 0
-        #print "range", self.flow.n_y , self.flow.n_x 
+        print "Doing Jacobi Numpy"
         
         while (iter_n < self.max_time_steps):
             self.flow.scalar_field[1:-1, 1:-1] = (self.flow.scalar_field[2:, 1:-1]
                                                           + self.flow.scalar_field[:-2, 1:-1]+
                                                           self.flow.scalar_field[1:-1, 2:] +
                                                           self.flow.scalar_field[1:-1, :-2] )/4.
-                                                          
-            
-            self.flow.scalar_field[:,0] = self.flow.scalar_field[:,self.flow.n_x - 2]
-            self.flow.scalar_field[:,self.flow.n_x -1] = self.flow.scalar_field[:,1]
+            #Toroidal conditions
+            if toroidal:
+                self.flow.scalar_field[:,0] = self.flow.scalar_field[:,self.flow.n_x - 2]
+                self.flow.scalar_field[:,self.flow.n_x -1] = self.flow.scalar_field[:,1]
             
             iter_n = iter_n + 1
             
@@ -66,10 +66,11 @@ class flow_calc():
                     print "total iterations: ", iter_n
                     break
             
-    def jacobi_weaver(self): #NOT WORKING
+    def jacobi_weaver(self, toroidal): 
         iter_n = 0
-        #print "range", self.flow.n_y , self.flow.n_x 
+        print "Doing Jacobi Weaver"
         field = self.flow.scalar_field
+        
         while (iter_n < self.max_time_steps):
             expr = "field[1:-1, 1:-1] = (field[2:, 1:-1] "\
                                                           "+ field[:-2, 1:-1]+"\
@@ -77,9 +78,10 @@ class flow_calc():
                                                           "field[1:-1, :-2] )/4."                                       
             
             weave.blitz(expr, check_size=0)
-            
-            field[:,0] = field[:,self.flow.n_x - 2]
-            field[:,self.flow.n_x -1] = field[:,1]
+            #Toroidal conditions
+            if toroidal:
+                field[:,0] = field[:,self.flow.n_x - 2]
+                field[:,self.flow.n_x -1] = field[:,1]
             
             iter_n = iter_n + 1
             

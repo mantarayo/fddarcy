@@ -11,10 +11,10 @@ class transport_reaction(object):
     def __init__(self):
        pass
    
-    def transport_only(self, advection, conc):
+    def transport_only(self, advection):
         
         for t in xrange(advection.max_time_steps):     
-            advection.advect_step_numpy(conc)
+            advection.advect_step_numpy()
             t = t + 1
         
     

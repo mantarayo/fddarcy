@@ -7,7 +7,7 @@ Created on 2012-10-17
 
 import numpy as np
 import shapely
-import shapely.geometry
+import shapely.geometry 
 
 
 class advection(object):
@@ -31,7 +31,9 @@ class advection(object):
         self.spacing = workhorse.spacing
         self.courant = 0.5 * self.deltaT / self.spacing 
         print "max_time_steps ", self.max_time_steps, "courant ", self.courant
-        
+        if np.abs(self.courant) > 1:
+            print "WARNING: Courant number larger than 1"
+            
         
     def line_boundary_conditions(self, conc_up, conc_down):
         self.conc[0, :] = np.linspace(conc_down, conc_up, self.n_x)
@@ -59,22 +61,22 @@ class advection(object):
         
         
     def advect_step(self):
-        onespacing = 1.0/4.0
+        
 
         #print "advecting..."
         
         for i in xrange(1, self.n_x - 1):
             for j in xrange(1, self.n_y - 1):
-                self.conc[i,j] = onespacing * (self.conc[i+1,j] + self.conc[i-1,j] + self.conc[i,j+1] + self.conc[i,j-1]) - \
-                self.courant*(self.velx[i,j]*(self.conc[i,j+1] - self.conc[i,j-1]) + self.vely[i,j]*(self.conc[i+1,j] - self.conc[i-1,j]))
+                self.conc[i,j] =  (self.conc[i+1,j] + self.conc[i-1,j] + self.conc[i,j+1] + self.conc[i,j-1])/4. - \
+                self.courant * (self.velx[i,j]*(self.conc[i+1,j] - self.conc[i-1,j]) + self.vely[i,j]*(self.conc[i,j+1] - self.conc[i,j-1]))
             
         
-    def advect_step_numpy(self, extern_conc):
+    def advect_step_numpy(self):
         
         #print "advecting..."
             
-        self.conc[1:-1, 1:-1] = (extern_conc[2:, 1:-1] + extern_conc[:-2, 1:-1]+ extern_conc[1:-1, 2:] +  extern_conc[1:-1, :-2] )/4. - \
-        self.courant * ( self.velx[1:-1,1:-1] *( extern_conc[1:-1,2:] - extern_conc[1:-1,:-2] ) + self.vely[1:-1,1:-1]*( extern_conc[2:,1:-1] - extern_conc[:-2,1:-1]  )   )
+        self.conc[1:-1, 1:-1] = (self.conc[2:, 1:-1] + self.conc[:-2, 1:-1]+ self.conc[1:-1, 2:] +  self.conc[1:-1, :-2] )/4. - \
+        self.courant * ( self.velx[1:-1,1:-1] *(self.conc[2:,1:-1] - self.conc[:-2,1:-1]  ) + self.vely[1:-1,1:-1]*( self.conc[1:-1,2:] - self.conc[1:-1,:-2]  )   )
         
         
         extern_conc = self.conc

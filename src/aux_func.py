@@ -15,12 +15,12 @@ def rounda(nume, deno):
 def calculate_courant(spacing,velx,vely):
     return np.sqrt(0.5)*spacing/(np.sqrt(np.power(np.max(velx),2) + np.power(np.max(vely),2)))
 
-def calculate_velocity(n_x, n_y, spacing, scalar_field):
+def calculate_velocity(n_x, n_y, spacing, scalar_field, constant):
     
     velx = np.zeros((n_x, n_y))
     vely = np.zeros((n_x, n_y))
     
-    constant = -1.0
+    #constant = -1.0
 
     for i in xrange(1, n_y - 1):
         for j in xrange(1, n_x - 1):

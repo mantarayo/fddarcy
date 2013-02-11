@@ -45,7 +45,7 @@ class plotter(object):
 
 
 
-    def plot_scalar(self,scalar_field, num_isolines, dim_x, dim_y, spacing, n_x, n_y):
+    def plot_scalar(self,scalar_field, num_isolines, dim_x, dim_y, spacing, n_x, n_y, title):
 
         plt.rcParams['contour.negative_linestyle'] = 'solid'
 
@@ -55,6 +55,7 @@ class plotter(object):
         y_axis = np.linspace(0,dim_y,num=n_y)
         
         fig0 = plt.figure()
+        fig0.suptitle(title, fontsize=20)
         
         ax = fig0.add_subplot(111)
         cs = ax.contourf(x_axis, y_axis, scalar_field, num_isolines)
